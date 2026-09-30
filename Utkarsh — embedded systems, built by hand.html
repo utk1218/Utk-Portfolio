@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Utkarsh — embedded systems, built by hand</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:wght@400;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{--cobalt:#1c1c1c;--ink:#000000;--fr4:#f4f4f4;--sig:#ffffff;--cu:#9a9a9a;--fg:#f4f4f4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--ink);color:var(--fg);font-family:'Bricolage Grotesque',system-ui,sans-serif;line-height:1.55;overflow-x:hidden}
+h1,h2,h3,.disp{font-family:Anton,Impact,sans-serif;font-weight:400;line-height:.88;margin:0;text-transform:uppercase}
+.hand{font-family:Caveat,cursive;font-size:1.6rem;color:var(--cu);line-height:1}
+a{color:inherit}a:focus-visible,button:focus-visible{outline:3px solid var(--sig);outline-offset:3px}
+@media(hover:hover){body.cur *{cursor:none}}
+#cur{position:fixed;left:0;top:0;width:14px;height:14px;border:2px solid var(--sig);border-radius:50%;pointer-events:none;z-index:99;transition:width .2s,height .2s,background .2s;mix-blend-mode:difference;display:none}
+body.cur #cur{display:block}#cur.big{width:56px;height:56px;background:var(--sig)}
+nav{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;display:flex;justify-content:space-between;padding:16px 4vw;font-weight:600;font-size:.95rem;transition:color .3s}
+nav a{text-decoration:none;margin-left:18px}nav a:hover{text-decoration:underline wavy var(--cu)}
+nav .where{margin:0}
+section{position:relative}
+/* hero */
+.hero{min-height:100svh;background:var(--cobalt);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 4vh}
+.hero .name{font-size:clamp(5.5rem,20vw,30rem);color:var(--sig);letter-spacing:-.02em;margin:0 0 0 -.03em;white-space:nowrap}
+.hero .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.09) 1px,transparent 1px);background-size:64px 64px}
+.hero .trace{position:absolute;left:0;top:34%;width:100%;height:30%}
+.trace path{stroke-dasharray:3000;stroke-dashoffset:3000;animation:draw 3.2s ease-out .3s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.blimp{position:absolute;right:6vw;top:14vh;width:min(58vw,760px);will-change:transform;z-index:2}
+.hero .sub{position:relative;z-index:3;display:flex;gap:4vw;justify-content:space-between;align-items:flex-end;padding:0 4vw;flex-wrap:wrap}
+.hero .sub p{max-width:30ch;margin:0 0 1.2rem;font-size:1.15rem}
+.hero .coord{position:absolute;left:4vw;top:16vh;font-size:.8rem;line-height:1.6;opacity:.8}
+.note{position:absolute;z-index:4;transform:rotate(-6deg)}
+/* p1 */
+.p1{background:var(--fr4);color:var(--ink);padding:14vh 0 0;overflow:hidden}
+.p1 .big{font-size:clamp(4rem,17vw,19rem);color:var(--cobalt);margin-left:4vw;position:relative;z-index:1}
+.p1 .art{width:95vw;margin:-9vw 0 0 0vw;display:block}
+.p1 .info{position:sticky;top:12vh}
+.p1 .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,3fr);gap:4vw;padding:0 4vw 12vh;align-items:start;margin-top:-6vw;position:relative}
+.p1 .wrap>div:first-child{grid-column:2;grid-row:1;padding-top:8vh}
+.p1 ul{list-style:none;padding:0;margin:1.5rem 0 0}.p1 li{border-top:2px solid var(--ink);padding:.7rem 0}
+.p1 li b{display:block;color:var(--cobalt)}
+.tag{display:inline-block;background:var(--ink);color:var(--sig);padding:2px 10px;font-weight:600;font-size:.85rem;transform:rotate(-2deg)}
+/* p2 */
+.p2{padding:16vh 4vw;display:grid;grid-template-columns:repeat(12,1fr);gap:24px;background:var(--ink)}
+.p2 h2{grid-column:1/9;font-size:clamp(3.5rem,12vw,13rem);color:var(--cu)}
+.p2 .win{grid-column:5/13;background:var(--fr4);color:var(--ink);border:3px solid var(--sig);box-shadow:14px 14px 0 #555;margin-top:-2vw}
+.win .bar{background:var(--sig);padding:6px 12px;font-weight:600;font-size:.85rem;display:flex;justify-content:space-between}
+.win .body{padding:22px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.win .k{font-size:.8rem;opacity:.6}.win .v{font-size:1.5rem;font-weight:600;overflow-wrap:anywhere}
+.win button{grid-column:1/-1;background:var(--ink);color:var(--sig);border:0;padding:12px;font:600 1rem 'Bricolage Grotesque';cursor:pointer}
+.led{width:16px;height:16px;border-radius:50%;background:#aaa;display:inline-block;vertical-align:-3px;margin-right:8px}.led.on{background:var(--cu);box-shadow:0 0 14px var(--cu)}
+.p2 .txt{grid-column:1/5;grid-row:2;align-self:start;margin-top:-6vw}
+.p2 .txt p{margin:.5rem 0}
+@media(max-width:800px){.p2 h2,.p2 .win,.p2 .txt{grid-column:1/-1;margin-top:0;grid-row:auto}.p1 .wrap{grid-template-columns:1fr}.p1 .wrap>div:first-child{grid-column:1}.p1 .info{position:static}}
+/* p3 */
+.p3{background:var(--sig);color:var(--ink);min-height:90vh;padding:10vh 0 0;overflow:hidden}
+.p3 h2{font-size:clamp(4rem,20vw,22rem);padding-left:4vw;white-space:nowrap}
+.p3 svg.track{width:100%;height:auto;display:block;margin-top:-4vw}
+.p3 .foot{display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap;padding:2vh 4vw 8vh;align-items:flex-end}
+.p3 .foot p{max-width:38ch;margin:0}
+.stamp{border:4px solid var(--ink);color:var(--ink);padding:6px 16px;font-family:Anton;font-size:1.8rem;transform:rotate(-8deg);text-transform:uppercase}
+/* stack */
+.stack{background:var(--ink);padding:14vh 4vw;display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:4vw;align-items:center}
+.stack h2{font-size:clamp(3rem,9vw,9rem);color:var(--fr4)}
+.chip{width:100%;max-width:760px;height:auto;justify-self:center}
+.chip text{font-family:'Bricolage Grotesque';font-size:15px;fill:var(--fr4)}
+.chip .pin{stroke:var(--sig);stroke-width:3;transition:stroke .2s}.chip g:hover .pin{stroke:var(--cu)}
+.chip g:hover text{fill:var(--sig)}
+@media(max-width:800px){.stack{grid-template-columns:1fr}}
+/* exp */
+.exp{background:var(--fr4);color:var(--ink);padding:14vh 4vw}
+.exp h2{font-size:clamp(3rem,10vw,11rem);margin-bottom:8vh}
+.tl{position:relative;margin-left:min(22vw,220px);border-left:4px solid var(--cobalt);padding-left:4vw}
+.tl article{position:relative;padding-bottom:9vh;max-width:64ch}
+.tl article::before{content:"";position:absolute;left:calc(-4vw - 12px);top:.5rem;width:20px;height:20px;background:var(--cu);border:4px solid var(--fr4);outline:2px solid var(--cobalt);border-radius:50%}
+.tl .when{position:absolute;right:calc(100% + 4vw + 24px);width:min(22vw,200px);text-align:right;font:400 1.6rem Anton;color:var(--cobalt);text-transform:uppercase;line-height:1}
+.tl h3{font-size:2.4rem;margin-bottom:.4rem}.tl ul{padding-left:1.1rem;margin:.8rem 0}
+.edu{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2rem;border-top:4px solid var(--ink);padding-top:2rem;margin-top:2rem}
+@media(max-width:700px){.tl{margin-left:8px}.tl .when{position:static;text-align:left;width:auto;margin-bottom:.4rem}}
+/* close */
+.end{background:var(--cobalt);min-height:100svh;padding:14vh 4vw 6vh;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.end h2{font-size:clamp(4rem,19vw,22rem);color:var(--fr4)}
+.end h2 span{color:var(--sig)}
+.end .links{display:flex;flex-wrap:wrap;gap:1rem 3rem;font-size:1.4rem;font-weight:600;margin-top:6vh}
+.end .links a{text-decoration:none;border-bottom:4px solid var(--sig)}.end .links a:hover{background:var(--sig);color:var(--ink)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.trace path{animation:none;stroke-dashoffset:0}*{transition:none!important}animateMotion{display:none}}
+</style></head>
+<body><div id="root"></div><div id="cur"></div>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script>
+const h=React.createElement,{useState,useEffect,useRef}=React;
+
+function Blimp({style,cls}){return h('svg',{viewBox:'0 0 600 300',className:cls,style,role:'img','aria-label':'Illustration of the Bluetooth nano blimp'},
+ h('ellipse',{cx:300,cy:120,rx:270,ry:100,fill:'#f4f4f4',stroke:'#000000',strokeWidth:5}),
+ [90,150,210,270,330,390,450].map(x=>h('path',{key:x,d:`M${x} ${120-Math.sqrt(Math.max(0,1-((x-300)/270)**2))*100} Q${x+22} 120 ${x} ${120+Math.sqrt(Math.max(0,1-((x-300)/270)**2))*100}`,fill:'none',stroke:'#1c1c1c',strokeWidth:2,opacity:.55})),
+ h('path',{d:'M540 100 L600 40 L590 120 L600 200 L540 140Z',fill:'#8c8c8c',stroke:'#000000',strokeWidth:5,strokeLinejoin:'round'}),
+ h('rect',{x:240,y:212,width:120,height:44,rx:6,fill:'#ffffff',stroke:'#000000',strokeWidth:5}),
+ h('path',{d:'M270 212 L280 194 M330 212 L320 194',stroke:'#000000',strokeWidth:5}),
+ h('text',{x:300,y:242,textAnchor:'middle',fontSize:18,fontWeight:700,fill:'#000000',fontFamily:'Bricolage Grotesque'},'HC-05'),
+ h('g',{stroke:'#000000',strokeWidth:5,strokeLinecap:'round'},h('line',{x1:388,y1:238,x2:388,y2:280}),h('circle',{cx:388,cy:259,r:6,fill:'#8c8c8c'}))
+)}
+
+function Nav(){
+ const [s,setS]=useState('intro');
+ useEffect(()=>{const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&setS(e.target.id)),{rootMargin:'-45% 0px -50% 0px'});
+ document.querySelectorAll('section[id]').forEach(x=>io.observe(x));return()=>io.disconnect()},[]);
+ const light=['blimp','track','experience'].includes(s);
+ const names={intro:'Utkarsh · NIT Srinagar',blimp:'Build: nano blimp',esp:'Build: ESP32 server',track:'Build: line follower',stack:'Pinout',experience:'Work log',contact:'Say hi'};
+ return h('nav',{style:{color:light?'#000000':'#f4f4f4'}},h('span',{className:'where'},names[s]),
+  h('span',null,[['blimp','Builds'],['stack','Stack'],['experience','Work'],['contact','Contact']].map(([i,l])=>h('a',{key:i,href:'#'+i},l))))}
+
+function Hero(){
+ const [y,setY]=useState(0);
+ useEffect(()=>{const f=()=>setY(Math.min(window.scrollY,900));addEventListener('scroll',f,{passive:true});return()=>removeEventListener('scroll',f)},[]);
+ return h('section',{id:'intro',className:'hero'},
+  h('div',{className:'grid'}),
+  h('svg',{className:'trace',viewBox:'0 0 1440 300',preserveAspectRatio:'none','aria-hidden':true},
+   h('path',{d:'M0 150 H220 L240 150 L260 60 L290 240 L320 150 H520 V90 H600 V210 H700 V150 H900 L920 100 L940 200 L960 150 H1440',fill:'none',stroke:'#8c8c8c',strokeWidth:4})),
+  h('div',{className:'coord'},h('br'),'STM32 · ESP32 · Arduino'),
+  h(Blimp,{cls:'blimp',style:{transform:`translate(${-y*.25}px,${y*.35}px) rotate(${-4+y*.01}deg)`}}),
+  h('span',{className:'hand note',style:{right:'10vw',top:'10vh'}},'yes, it actually flies ↓'),
+  h('div',{className:'sub'},
+   h('p',null,'Electronics & communication student who solders first and asks questions after. Firmware, sensors, small robots that move.'),
+   h('p',{className:'hand',style:{color:'#ffffff',margin:'0 0 1.2rem'}},'scroll to see what I built')),
+  h('h1',{className:'name'},'Utkarsh'))}
+
+function Blimps(){return h('section',{id:'blimp',className:'p1'},
+ h('h2',{className:'big'},'Nano Blimp'),
+ h(Blimp,{cls:'art'}),
+ h('div',{className:'wrap'},
+  h('div',{className:'info'},
+   h('span',{className:'tag'},'May 2026 · Arduino Nano · Embedded C/C++'),
+   h('p',{style:{fontSize:'1.2rem',marginTop:'1rem'}},'A Bluetooth-controlled blimp light enough to float, driven from a phone in real time.'),
+   h('ul',null,
+    h('li',null,h('b',null,'Control'),'HC-05 link turns smartphone taps into motor and navigation commands.'),
+    h('li',null,h('b',null,'Drive'),'NPN transistors switch coreless DC motors, keeping motor current away from the Arduino.'),
+    h('li',null,h('b',null,'Power'),'TP4056 charging module keeps the whole thing compact and rechargeable.')))))}
+
+function Esp(){
+ const [ap,setAp]=useState(false),[on,setOn]=useState(false);
+ return h('section',{id:'esp',className:'p2'},
+  h('h2',null,'ESP32 talks back'),
+  h('div',{className:'win'},
+   h('div',{className:'bar'},h('span',null,ap?'192.168.4.1':'192.168.1.42'),h('span',null,'live demo, click me')),
+   h('div',{className:'body'},
+    h('div',null,h('div',{className:'k'},'Mode'),h('div',{className:'v'},ap?'Access Point':'Station')),
+    h('div',null,h('div',{className:'k'},'SSID'),h('div',{className:'v'},ap?'ESP32-Setup':'HomeNet')),
+    h('div',null,h('div',{className:'k'},'RSSI'),h('div',{className:'v'},ap?'n/a':'-58 dBm')),
+    h('div',null,h('div',{className:'k'},'Temp / Humidity'),h('div',{className:'v'},'27.4°C / 46%')),
+    h('div',{style:{gridColumn:'1/-1'}},h('span',{className:on?'led on':'led'}),'GPIO 2 is '+(on?'HIGH':'LOW')),
+    h('button',{onClick:()=>setOn(!on)},'Toggle GPIO'),
+    h('button',{onClick:()=>setAp(!ap),style:{background:'#1c1c1c',color:'#f4f4f4'}},'Switch AP / STA'))),
+  h('div',{className:'txt'},
+   h('span',{className:'tag'},'Nov 2025 · ESP32 · Embedded C'),
+   h('p',null,'Firmware that configures Wi-Fi by itself and hops between AP and STA modes. A hosted dashboard shows connection status, signal strength and live sensor data, and controls GPIO from any browser.'),
+   h('span',{className:'hand'},'this panel behaves like the real page')))}
+
+function Track(){return h('section',{id:'track',className:'p3'},
+ h('h2',null,'Line follower'),
+ h('svg',{className:'track',viewBox:'0 0 1440 320'},
+  h('path',{id:'lp',d:'M-20 250 C200 250 260 80 480 80 S760 260 960 200 S1240 60 1460 120',fill:'none',stroke:'#000000',strokeWidth:26}),
+  h('path',{d:'M-20 250 C200 250 260 80 480 80 S760 260 960 200 S1240 60 1460 120',fill:'none',stroke:'#ffffff',strokeWidth:4,strokeDasharray:'18 14'}),
+  h('g',null,h('rect',{x:-26,y:-16,width:52,height:32,rx:5,fill:'#8c8c8c',stroke:'#000000',strokeWidth:4}),h('circle',{cx:22,cy:-6,r:5,fill:'#f4f4f4'}),h('circle',{cx:22,cy:6,r:5,fill:'#f4f4f4'}),
+   h('animateMotion',{dur:'7s',repeatCount:'indefinite',rotate:'auto'},h('mpath',{href:'#lp'})))),
+ h('div',{className:'foot'},
+  h('p',null,h('b',null,'Tech Fusion, NIT Srinagar · June 2024. '),'IR sensors feed GPIO signals to an L298N motor driver on an Arduino. The circuit was proven in Tinkercad before any wire was cut.'),
+  h('div',{className:'stamp'},'Winner')))}
+
+function Stack(){
+ const L=['STM32','ESP32','Arduino UNO','ESP8266','C / Embedded C','Python'],R=['UART','SPI','QEMU','Sentaurus TCAD','STM32CubeIDE','Multimeter'];
+ const row=(t,i,left)=>h('g',{key:t},h('line',{className:'pin',x1:left?60:540,y1:60+i*52,x2:left?150:450,y2:60+i*52}),h('text',{x:left?50:550,y:65+i*52,textAnchor:left?'end':'start'},t));
+ return h('section',{id:'stack',className:'stack'},
+  h('div',null,h('h2',null,'Pinout'),h('p',{className:'hand'},'what I reach for'),h('p',null,'Hover a pin. Left side is silicon and languages, right side is protocols and the bench.')),
+  h('svg',{className:'chip',viewBox:'0 0 600 380',role:'img','aria-label':'Chip diagram of skills'},
+   h('rect',{x:150,y:20,width:300,height:340,rx:6,fill:'#1c1c1c',stroke:'#ffffff',strokeWidth:4}),
+   h('circle',{cx:180,cy:50,r:9,fill:'none',stroke:'#f4f4f4',strokeWidth:3}),
+   h('text',{x:300,y:190,textAnchor:'middle',style:{fontFamily:'Anton',fontSize:'46px',fill:'#ffffff'}},'UTKARSH'),
+   h('text',{x:300,y:220,textAnchor:'middle'},'B.Tech ECE · NIT Srinagar'),
+   L.map((t,i)=>row(t,i,true)),R.map((t,i)=>row(t,i,false))))}
+
+function Exp(){return h('section',{id:'experience',className:'exp'},
+ h('h2',null,'Work log'),
+ h('div',{className:'tl'},
+  h('article',null,h('div',{className:'when'},'Dec 2025 – Feb 2026'),h('h3',null,'DRDO-SSPL, Delhi'),h('b',null,'Fabrication Lab intern'),
+   h('ul',null,h('li',null,'Simulated infrared-sensing semiconductor devices in Sentaurus TCAD.'),h('li',null,'Modeled devices in 2D to evaluate electrical and physical behaviour.'),h('li',null,'Documented dark current and I-V characteristics from the simulations.'))),
+  h('article',null,h('div',{className:'when'},'May – Aug 2025'),h('h3',null,'Robonox'),h('b',null,'Embedded / Electronics intern'),
+   h('ul',null,h('li',null,'Worked on ESP32, IoT and drone systems built for a tech fest, in C on Arduino IDE.'),h('li',null,'Debugged drone hardware and control systems with the team.'),h('li',null,'Helped tune robotic system performance.')))),
+ h('div',{className:'edu'},
+  h('div',null,h('b',null,'NIT Srinagar, 2023 – present'),h('br'),'B.Tech, Electronics & Communication. Digital electronics, embedded systems, VHDL lab.'),
+  h('div',null,h('b',null,'Recognition'),h('br'),'Selected to represent NIT Srinagar at Smart India Hackathon. RTOS course by GeeksforGeeks and DigiKey.'),
+  h('div',null,h('b',null,'Schooling'),h('br'),'Delhi Public School, Udhampur. Class XII 78%, Class X 84%.')))}
+
+function End(){return h('section',{id:'contact',className:'end'},
+ h('h2',null,'Let’s build ',h('span',null,'something.')),
+ h('div',null,h('span',{className:'hand',style:{color:'#ffffff'}},),
+  h('div',{className:'links'},
+   h('a',{href:'mailto:i01utkarsh12@gmail.com'},'i01utkarsh12@gmail.com'),
+   h('a',{href:'tel:+919797969060'},'+91 97979 69060'),
+   h('a',{href:'https://www.linkedin.com/in/utkarsh-singh-8344bb3b4',target:'_blank',rel:'noopener'},'LinkedIn'))))}
+
+function App(){
+ useEffect(()=>{
+  if(!matchMedia('(hover:hover)').matches)return;document.body.classList.add('cur');
+  const c=document.getElementById('cur');
+  const m=e=>{c.style.transform=`translate(${e.clientX-c.offsetWidth/2}px,${e.clientY-c.offsetHeight/2}px)`;c.classList.toggle('big',!!e.target.closest('a,button'))};
+  addEventListener('mousemove',m);return()=>removeEventListener('mousemove',m)},[]);
+ return h(React.Fragment,null,h(Nav),h(Hero),h(Blimps),h(Esp),h(Track),h(Stack),h(Exp),h(End))}
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script></body></html>
